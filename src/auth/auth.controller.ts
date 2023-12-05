@@ -18,11 +18,10 @@ export class AuthController {
   }
 
   @Post()
-  async postQuestionnary(@Body() user: UserDTO) {
-    const status = await this.authService.postQuestionnary(user)
-    if (status === HttpStatus.UNAUTHORIZED) {
+  async checkUser(@Body() user: UserDTO) {
+    if (!(await this.authService.checkCaptcha(user))) {
       throw new HttpException('Unsuccessful captcha', HttpStatus.UNAUTHORIZED)
-    } else if (status === HttpStatus.FORBIDDEN) {
+    } else if (!(await this.authService.checkPhone(user))) {
       throw new HttpException('Bad phone number', HttpStatus.FORBIDDEN)
     } else {
       return 'Questionnary successfully sent'
