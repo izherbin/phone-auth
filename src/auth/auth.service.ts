@@ -19,7 +19,8 @@ export class AuthService {
   async testHttp() {
     const request = this.http
       .get('https://catfact.ninja/fact')
-      .pipe(map((res) => res.data?.fact))
+      // .pipe(map((res) => res.data?.fact))
+      .pipe(map((res) => res.status))
       .pipe(
         catchError(() => {
           throw new ForbiddenException('API not available')
