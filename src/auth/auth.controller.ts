@@ -19,6 +19,7 @@ export class AuthController {
 
   @Post()
   async checkUser(@Body() user: UserDTO) {
+    console.log('user:', user)
     if (!(await this.authService.checkCaptcha(user))) {
       throw new HttpException('Unsuccessful captcha', HttpStatus.UNAUTHORIZED)
     } else if (!(await this.authService.checkPhone(user))) {

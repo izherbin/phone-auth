@@ -19,8 +19,8 @@ export class AuthService {
   async testHttp() {
     const request = this.http
       .get('https://catfact.ninja/fact')
-      // .pipe(map((res) => res.data?.fact))
-      .pipe(map((res) => res.status))
+      .pipe(map((res) => res.data?.fact))
+      // .pipe(map((res) => res.status))
       .pipe(
         catchError(() => {
           throw new ForbiddenException('API not available')
@@ -31,18 +31,26 @@ export class AuthService {
   }
 
   async checkCaptcha(user: UserDTO): Promise<boolean> {
-    console.log('user:', user)
+    const secret = this.configService.get<string>('SMARTCAPTCHA_SERVER_KEY')
+    const token = user.token
     const request = this.http
       .get('https://smartcaptcha.yandexcloud.net/validate', {
         params: {
-          secret: this.configService.get<string>('SMARTCAPTCHA_SERVER_KEY'),
-          token: user.token
+          secret,
+          token
         }
       })
-      .pipe(map((res) => res.status))
+      .pipe(map((res) => res.data?.status))
+      .pipe(
+        catchError(() => {
+          throw new ForbiddenException('Cqptcha API not available')
+        })
+      )
+    console.log('request:', request)
 
     const status = await lastValueFrom(request)
-    if (status !== 200) {
+    console.log('status:', status)
+    if (status !== 'ok') {
       return false
     } else {
       return true

@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Captcha</title>
+    <script
+      src="https://smartcaptcha.yandexcloud.net/captcha.js"
+      defer
+    ></script>
+  </head>
+  <body>
+    <div
+      id="captcha-container"
+      class="smart-captcha"
+      data-sitekey="ysc1_QT1hNpBKZUYu1MzE3bPBFhMNANJfjavIFztk3oe3ae7aa60f"
+    >
+      <input type="hidden" id="tokenField" name="smart-token" value="<токен>" />
+    </div>
+    <input type="button" onclick="showToken()" value="Показать токен" />
+    <p id="smart-token" value="1234">Your token is:</p>
+    <script>
+      function showToken() {
+        const tokenField = document.getElementsByName('smart-token')[0]
+        console.log('tokenField:', tokenField)
+        const token = tokenField.value
+        console.log('tokenField.value:', tokenField.value)
+        document.getElementById('smart-token').innerText =
+          'Your token is: ' + token.toString()
+      }
+    </script>
+  </body>
+</html>
